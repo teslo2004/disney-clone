@@ -1,35 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { selectMovies } from '../features/movie/movieSlice';
+import { useSelector } from 'react-redux';
 
 function Movies() {
+  const movies = useSelector(selectMovies);
+
   return (
     <Container>
       <h4>Recommended for you</h4>
       <Content>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
-        <Wrap>
-          <img src="/images/simpsons.jpeg" />
-        </Wrap>
+        {movies &&
+          movies.map((movie) => (
+            <Wrap key={movie.id}>
+              <Link to={`/detail/${movie.id}`}>
+                <img src={movie.cardImg} />
+              </Link>
+            </Wrap>
+          ))}
       </Content>
     </Container>
   );
@@ -37,7 +26,9 @@ function Movies() {
 
 export default Movies;
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin-bottom: 10px;
+`;
 const Content = styled.div`
   display: grid;
   grid-gap: 25px;
@@ -54,7 +45,7 @@ const Wrap = styled.div`
   img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: fill;
   }
 
   &:hover {

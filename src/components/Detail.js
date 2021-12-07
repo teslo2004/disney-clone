@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import db from '../firebase';
 
 function Detail() {
+  const { id } = useParams();
+  const [movie, setMovie] = useState({});
+
+  useEffect(() => {
+    db.collection('movies')
+      .doc(id)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          setMovie(doc.data());
+        } else {
+        }
+      });
+  }, []);
+
   return (
     <Container>
       <Background>
-        <img src="/images/bao.jpg" />
+        <img src={movie.backgroundImg} alt={movie.title} />
       </Background>
       <ImageTitle>
-        <img src="/images/bao-disney.png" />
+        <img src={movie.titleImg} />
       </ImageTitle>
       <Controls>
         <PlayButton>
@@ -26,13 +43,8 @@ function Detail() {
           <img src="/images/group-icon.png" />
         </GroupWatchButton>
       </Controls>
-      <SubTitle>2018 • 7m • Family, Fantasy, Kids, Animation</SubTitle>
-      <Description>
-        The film is about an aging and lonely Chinese-Canadian mother, suffering from empty nest
-        syndrome, who receives an unexpected second chance at motherhood when she makes a steamed
-        bun (baozi) that comes to life. The film won the Academy Award for Best Animated Short Film
-        at the 91st Academy Awards.
-      </Description>
+      <SubTitle>{movie.subTitle}</SubTitle>
+      <Description>{movie.description}</Description>
     </Container>
   );
 }
